@@ -53,6 +53,7 @@ const products = await client.fetch(`*[_type == "product"]{
   };
 // Robust Filtering: Ye har tarah ke data format ko handle karega
 const whatsappNumber = "919350969961";
+const siteUrl = "https://prisa-makeover.vercel.app"; // Apni live site ka UR
 
 const nailsProducts = products?.filter((p: any) => p.category === 'nails' || p.category?.value === 'nails') || [];
 const jewelleryProducts = products?.filter((p: any) => p.category === 'jewellery' || p.category?.value === 'jewellery') || [];
@@ -139,30 +140,27 @@ const jewelleryProducts = products?.filter((p: any) => p.category === 'jewellery
       </section>
      
     {/* SHOPPING SECTION */}
-    <section id="shop-section" className="py-32 px-6 bg-black text-white font-sans">
+   <section id="shop-section" className="py-32 px-6 bg-black text-white font-sans">
   <div className="max-w-6xl mx-auto">
-    
-    <h2 className="font-serif text-5xl italic text-center mb-10">
-      The <span className="text-orange-400">Prisa</span> Collection
-    </h2>
-
     <div className="space-y-32">
-      {/* NAILS SECTION */}
+      
+      {/* --- NAILS SECTION --- */}
       {nailsProducts.length > 0 && (
         <div>
           <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">Press-On Nails</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {nailsProducts.map((p: any) => {
-              const productImg = p.image ? urlFor(p.image).url() : "";
-              const message = `Hi Prisa Makeover, I want to order:\n\n*Product:* ${p.name}\n*Price:* ${p.price}\n*Image Link:* ${productImg}`;
+              // Yahan hum particular product ka link bana rahe hain
+              const productLink = `${siteUrl}#${p._id}`;
+              const message = `Hi Prisa Makeover, I want to order:\n\n*Product:* ${p.name}\n*Price:* ${p.price}\n*View Product:* ${productLink}`;
               
               return (
-                <div key={p._id} className="group">
+                <div key={p._id} id={p._id} className="group scroll-mt-20"> {/* scroll-mt-20 se image heading ke niche nahi dabegi */}
                   <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
-                    {p.image && <img src={productImg} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
+                    {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
                   </div>
-                  <div className="flex justify-between items-center px-2 text-left">
-                    <div className="space-y-1">
+                  <div className="flex justify-between items-center px-2">
+                    <div className="space-y-1 text-left">
                       <h4 className="font-serif text-xl italic">{p.name}</h4>
                       <p className="text-orange-400 font-sans text-sm">{p.price}</p>
                     </div>
@@ -181,19 +179,19 @@ const jewelleryProducts = products?.filter((p: any) => p.category === 'jewellery
         </div>
       )}
 
-      {/* JEWELLERY SECTION */}
+      {/* --- JEWELLERY SECTION (Same logic as above) --- */}
       {jewelleryProducts.length > 0 && (
         <div>
           <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">Luxury Jewellery</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {jewelleryProducts.map((p: any) => {
-              const productImg = p.image ? urlFor(p.image).url() : "";
-              const message = `Hi Prisa Makeover, I want to order:\n\n*Jewellery:* ${p.name}\n*Price:* ${p.price}\n*Image Link:* ${productImg}`;
+              const productLink = `${siteUrl}#${p._id}`;
+              const message = `Hi Prisa Makeover, I want to order:\n\n*Jewellery:* ${p.name}\n*Price:* ${p.price}\n*View Product:* ${productLink}`;
 
               return (
-                <div key={p._id} className="group">
+                <div key={p._id} id={p._id} className="group scroll-mt-20">
                   <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
-                    {p.image && <img src={productImg} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
+                    {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
                   </div>
                   <div className="flex justify-between items-center px-2 text-left">
                     <div className="space-y-1">
@@ -214,10 +212,10 @@ const jewelleryProducts = products?.filter((p: any) => p.category === 'jewellery
           </div>
         </div>
       )}
+
     </div>
   </div>
 </section>
-
 
       {/* MY WORK GALLERY (LIVE) */}
       <section id="gallery-section" className="py-24 px-6 bg-[#fafafa]"></section>
