@@ -27,11 +27,11 @@ export default function PrisaMakeover() {
     setBaseUrl(window.location.origin);
     const fetchData = async () => {
       try {
-       const products = await client.fetch(`*[_type == "product"]{
+const products = await client.fetch(`*[_type == "product"]{
   _id,
   name,
   price,
-  "category": category.value,
+  category,
   isSoldOut,
   image
 } | order(_createdAt desc)`);
@@ -51,9 +51,15 @@ export default function PrisaMakeover() {
     const message = encodeURIComponent("Hi Prisa Makeover, I would like to book an appointment for your services. Please let me know the available slots.");
     window.open(`https://wa.me/919350969961?text=${message}`, '_blank');
   };
-{/* --- Logic (Return se upar) --- */}
-const nailsProducts = products?.filter((p: any) => p.category === 'nails') || [];
-const jewelleryProducts = products?.filter((p: any) => p.category === 'jewellery') || [];
+// Robust Filtering: Ye har tarah ke data format ko handle karega
+const nailsProducts = products?.filter((p: any) => 
+  p.category === 'nails' || p.category?.value === 'nails'
+) || [];
+
+const jewelleryProducts = products?.filter((p: any) => 
+  p.category === 'jewellery' || p.category?.value === 'jewellery'
+) || [];
+
 const whatsappNumber = "919350969961";
   return (
     <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white">
@@ -142,7 +148,7 @@ const whatsappNumber = "919350969961";
     
     {/* Heading & Note */}
     <h2 className="font-serif text-5xl italic text-center mb-10">
-      The <span className="text-orange-400">Prisa</span> Collection
+      Our Collection
     </h2>
 
     <div className="flex flex-col items-center space-y-6 mb-24 text-center">
