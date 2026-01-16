@@ -27,13 +27,11 @@ export default function PrisaMakeover() {
     setBaseUrl(window.location.origin);
     const fetchData = async () => {
       try {
-        // Purani line: const products = await client.fetch(`*[_type == "product"]...`);
-// Nayi line (Ise copy karein):
-const products = await client.fetch(`*[_type == "product"]{
+       const products = await client.fetch(`*[_type == "product"]{
   _id,
   name,
   price,
-  category,
+  "category": category.value,
   isSoldOut,
   image
 } | order(_createdAt desc)`);
@@ -53,11 +51,10 @@ const products = await client.fetch(`*[_type == "product"]{
     const message = encodeURIComponent("Hi Prisa Makeover, I would like to book an appointment for your services. Please let me know the available slots.");
     window.open(`https://wa.me/919350969961?text=${message}`, '_blank');
   };
-  const nailsProducts = products?.filter((p: any) => p.category === 'nails') || [];
+{/* --- Logic (Return se upar) --- */}
+const nailsProducts = products?.filter((p: any) => p.category === 'nails') || [];
 const jewelleryProducts = products?.filter((p: any) => p.category === 'jewellery') || [];
-// Backup: Agar category select karna bhul gaye ho toh wo products yahan dikhenge
-const uncategorized = products?.filter((p: any) => !p.category) || [];
-const whatsappNumber = "919350969961"; // Apna number yahan dalo
+const whatsappNumber = "919350969961";
   return (
     <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white">
       
@@ -139,7 +136,9 @@ const whatsappNumber = "919350969961"; // Apna number yahan dalo
           </div>
         </div>
       </section>
-      <section id="shop-section" className="py-32 px-6 bg-black text-white">
+     
+     {/* --- Shopping Section (Return ke andar) --- */}
+<section id="shop-section" className="py-32 px-6 bg-black text-white">
   <div className="max-w-6xl mx-auto">
     
     <h2 className="font-serif text-5xl italic text-center mb-10">
@@ -155,8 +154,7 @@ const whatsappNumber = "919350969961"; // Apna number yahan dalo
     </div>
 
     <div className="space-y-32">
-      
-      {/* --- NAILS SUB-SECTION --- */}
+      {/* 1. NAILS SECTION */}
       {nailsProducts.length > 0 && (
         <div>
           <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
@@ -174,13 +172,7 @@ const whatsappNumber = "919350969961"; // Apna number yahan dalo
                     <h4 className="font-serif text-xl italic">{p.name}</h4>
                     <p className="text-orange-400 font-sans text-sm">{p.price}</p>
                   </div>
-                  <a 
-                    href={`https://wa.me/${whatsappNumber}?text=Hi, I want to order: ${p.name}`}
-                    target="_blank"
-                    className={`bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all duration-300 ${p.isSoldOut ? 'pointer-events-none opacity-50' : ''}`}
-                  >
-                    {p.isSoldOut ? 'SOLD' : 'ORDER'}
-                  </a>
+                  <a href={`https://wa.me/${whatsappNumber}?text=Hi, I want to order: ${p.name}`} target="_blank" className="bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all duration-300">ORDER</a>
                 </div>
               </div>
             ))}
@@ -188,7 +180,7 @@ const whatsappNumber = "919350969961"; // Apna number yahan dalo
         </div>
       )}
 
-      {/* --- JEWELLERY SUB-SECTION --- */}
+      {/* 2. JEWELLERY SECTION */}
       {jewelleryProducts.length > 0 && (
         <div>
           <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
@@ -206,35 +198,13 @@ const whatsappNumber = "919350969961"; // Apna number yahan dalo
                     <h4 className="font-serif text-xl italic">{p.name}</h4>
                     <p className="text-orange-400 font-sans text-sm">{p.price}</p>
                   </div>
-                  <a 
-                    href={`https://wa.me/${whatsappNumber}?text=Hi, I want to order: ${p.name}`}
-                    target="_blank"
-                    className={`bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all duration-300 ${p.isSoldOut ? 'pointer-events-none opacity-50' : ''}`}
-                  >
-                    {p.isSoldOut ? 'SOLD' : 'ORDER'}
-                  </a>
+                  <a href={`https://wa.me/${whatsappNumber}?text=Hi, I want to order: ${p.name}`} target="_blank" className="bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all duration-300">ORDER</a>
                 </div>
               </div>
             ))}
           </div>
         </div>
       )}
-
-      {/* --- BACKUP SECTION (For uncategorized products) --- */}
-      {uncategorized.length > 0 && (
-        <div className="pt-10 border-t border-neutral-800">
-          <p className="text-neutral-500 text-center italic mb-10">More designs from our studio...</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 opacity-80">
-            {uncategorized.map((p: any) => (
-              <div key={p._id} className="flex justify-between items-center border border-neutral-800 p-4">
-                <h4 className="font-serif text-lg italic">{p.name}</h4>
-                <a href={`https://wa.me/${whatsappNumber}?text=Hi, I want to order: ${p.name}`} target="_blank" className="text-orange-400 font-bold uppercase text-sm border-b border-orange-400">Order Now</a>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
     </div>
   </div>
 </section>
