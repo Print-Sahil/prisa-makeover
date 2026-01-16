@@ -52,15 +52,12 @@ const products = await client.fetch(`*[_type == "product"]{
     window.open(`https://wa.me/919350969961?text=${message}`, '_blank');
   };
 // Robust Filtering: Ye har tarah ke data format ko handle karega
-const nailsProducts = products?.filter((p: any) => 
-  p.category === 'nails' || p.category?.value === 'nails'
-) || [];
-
-const jewelleryProducts = products?.filter((p: any) => 
-  p.category === 'jewellery' || p.category?.value === 'jewellery'
-) || [];
-
 const whatsappNumber = "919350969961";
+// Website ka live link (Ise apni Vercel URL se check kar lena Sahil)
+const siteUrl = "https://prisa-makeover.vercel.app"; 
+
+const nailsProducts = products?.filter((p: any) => p.category === 'nails' || p.category?.value === 'nails') || [];
+const jewelleryProducts = products?.filter((p: any) => p.category === 'jewellery' || p.category?.value === 'jewellery') || [];
   return (
     <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white">
       
@@ -143,42 +140,36 @@ const whatsappNumber = "919350969961";
         </div>
       </section>
      
-  <section id="shop-section" className="py-32 px-6 bg-black text-white">
+     <section id="shop-section" className="py-32 px-6 bg-black text-white">
   <div className="max-w-6xl mx-auto">
     
-    {/* Heading & Note */}
     <h2 className="font-serif text-5xl italic text-center mb-10">
-      Our Collection
+      The <span className="text-orange-400">Prisa</span> Collection
     </h2>
 
-    <div className="flex flex-col items-center space-y-6 mb-24 text-center">
-      <div className="h-[1px] w-16 bg-orange-400/30"></div>
-      <p className="font-sans text-xs md:text-sm uppercase tracking-[0.4em] text-neutral-400 font-light max-w-2xl px-4">
-        " SELECT YOUR FAVORITE PIECE AND FINALIZE ON WHATSAPP CONCIERGE "
-      </p>
-      <div className="h-[1px] w-16 bg-orange-400/30"></div>
-    </div>
-
     <div className="space-y-32">
-      {/* --- NAILS SECTION --- */}
+      {/* NAILS SECTION */}
       {nailsProducts.length > 0 && (
         <div>
-          <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
-            Press-On Nails
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-left">
+          <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">Press-On Nails</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {nailsProducts.map((p: any) => (
               <div key={p._id} className="group">
                 <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
                   {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
                 </div>
                 <div className="flex justify-between items-center px-2">
-                  <div className="space-y-1">
+                  <div className="space-y-1 text-left">
                     <h4 className="font-serif text-xl italic">{p.name}</h4>
                     <p className="text-orange-400 font-sans text-sm">{p.price}</p>
                   </div>
                   <a 
-                    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Hi Prisa Makeover, I want to order this: " + p.name + " (" + p.price + ")")}`}
+                    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+                      "Hi Prisa Makeover, I want to order:\n\n" + 
+                      "*Product:* " + p.name + "\n" +
+                      "*Price:* " + p.price + "\n" +
+                      "*Link:* " + siteUrl + "#shop-section"
+                    )}`}
                     target="_blank" 
                     className="bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all"
                   >
@@ -191,25 +182,28 @@ const whatsappNumber = "919350969961";
         </div>
       )}
 
-      {/* --- JEWELLERY SECTION --- */}
+      {/* JEWELLERY SECTION */}
       {jewelleryProducts.length > 0 && (
         <div>
-          <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
-            Luxury Jewellery
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-left">
+          <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">Luxury Jewellery</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {jewelleryProducts.map((p: any) => (
               <div key={p._id} className="group">
                 <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
                   {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
                 </div>
                 <div className="flex justify-between items-center px-2">
-                  <div className="space-y-1">
+                  <div className="space-y-1 text-left">
                     <h4 className="font-serif text-xl italic">{p.name}</h4>
                     <p className="text-orange-400 font-sans text-sm">{p.price}</p>
                   </div>
                   <a 
-                    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Hi Prisa Makeover, I want to order this: " + p.name + " (" + p.price + ")")}`}
+                    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+                      "Hi Prisa Makeover, I want to order:\n\n" + 
+                      "*Jewellery:* " + p.name + "\n" +
+                      "*Price:* " + p.price + "\n" +
+                      "*Link:* " + siteUrl + "#shop-section"
+                    )}`}
                     target="_blank" 
                     className="bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all"
                   >
