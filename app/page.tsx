@@ -137,42 +137,33 @@ const whatsappNumber = "919350969961";
         </div>
       </section>
      
-     {/* --- Shopping Section (Return ke andar) --- */}
-<section id="shop-section" className="py-32 px-6 bg-black text-white">
+     <section id="shop-section" className="py-32 px-6 bg-black text-white">
   <div className="max-w-6xl mx-auto">
-    
-    <h2 className="font-serif text-5xl italic text-center mb-10">
-      The <span className="text-orange-400">Prisa</span> Collection
-    </h2>
-
-    <div className="flex flex-col items-center space-y-6 mb-24">
-      <div className="h-[1px] w-16 bg-orange-400/30"></div>
-      <p className="font-sans text-xs md:text-sm uppercase tracking-[0.4em] text-neutral-400 font-light text-center">
-        " SELECT YOUR FAVORITE PIECE AND FINALIZE ON WHATSAPP CONCIERGE "
-      </p>
-      <div className="h-[1px] w-16 bg-orange-400/30"></div>
-    </div>
+    <h2 className="font-serif text-5xl italic text-center mb-10"> Our Collection</h2>
 
     <div className="space-y-32">
       {/* 1. NAILS SECTION */}
       {nailsProducts.length > 0 && (
         <div>
-          <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
-            Press-On Nails
-          </h3>
+          <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest text-left">Press-On Nails</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {nailsProducts.map((p: any) => (
-              <div key={p._id} className={`group ${p.isSoldOut ? 'opacity-50' : ''}`}>
+              <div key={p._id} className="group">
                 <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
-                  {p.isSoldOut && <div className="absolute top-4 left-4 z-20 bg-red-600 text-white text-[10px] font-bold px-3 py-1 uppercase italic">Sold Out</div>}
                   {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
                 </div>
                 <div className="flex justify-between items-center px-2">
-                  <div className="space-y-1">
+                  <div className="space-y-1 text-left">
                     <h4 className="font-serif text-xl italic">{p.name}</h4>
                     <p className="text-orange-400 font-sans text-sm">{p.price}</p>
                   </div>
-                  <a href={`https://wa.me/${whatsappNumber}?text=Hi, I want to order: ${p.name}`} target="_blank" className="bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all duration-300">ORDER</a>
+                  <a 
+                    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Hi Prisa Makeover, I want to order this product: " + p.name + " (Price: " + p.price + ")")}`}
+                    target="_blank" 
+                    className="bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all duration-300"
+                  >
+                    ORDER
+                  </a>
                 </div>
               </div>
             ))}
@@ -183,22 +174,25 @@ const whatsappNumber = "919350969961";
       {/* 2. JEWELLERY SECTION */}
       {jewelleryProducts.length > 0 && (
         <div>
-          <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
-            Luxury Jewellery
-          </h3>
+          <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest text-left">Luxury Jewellery</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {jewelleryProducts.map((p: any) => (
-              <div key={p._id} className={`group ${p.isSoldOut ? 'opacity-50' : ''}`}>
+              <div key={p._id} className="group">
                 <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
-                  {p.isSoldOut && <div className="absolute top-4 left-4 z-20 bg-red-600 text-white text-[10px] font-bold px-3 py-1 uppercase italic">Sold Out</div>}
                   {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
                 </div>
                 <div className="flex justify-between items-center px-2">
-                  <div className="space-y-1">
+                  <div className="space-y-1 text-left">
                     <h4 className="font-serif text-xl italic">{p.name}</h4>
                     <p className="text-orange-400 font-sans text-sm">{p.price}</p>
                   </div>
-                  <a href={`https://wa.me/${whatsappNumber}?text=Hi, I want to order: ${p.name}`} target="_blank" className="bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all duration-300">ORDER</a>
+                  <a 
+                    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Hi Prisa Makeover, I want to order this jewellery: " + p.name + " (Price: " + p.price + ")")}`}
+                    target="_blank" 
+                    className="bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all duration-300"
+                  >
+                    ORDER
+                  </a>
                 </div>
               </div>
             ))}
@@ -208,6 +202,7 @@ const whatsappNumber = "919350969961";
     </div>
   </div>
 </section>
+
       {/* MY WORK GALLERY (LIVE) */}
       <section id="gallery-section" className="py-24 px-6 bg-[#fafafa]"></section>
   
