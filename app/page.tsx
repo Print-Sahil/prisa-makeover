@@ -27,13 +27,20 @@ export default function PrisaMakeover() {
     setBaseUrl(window.location.origin);
     const fetchData = async () => {
       try {
-        const productData = await client.fetch(`*[_type == "product"]{
-          name, price, image, isSoldOut
-        }`);
+        // Purani line: const products = await client.fetch(`*[_type == "product"]...`);
+// Nayi line (Ise copy karein):
+const products = await client.fetch(`*[_type == "product"]{
+  _id,
+  name,
+  price,
+  category,
+  isSoldOut,
+  image
+} | order(_createdAt desc)`);
         const galleryData = await client.fetch(`*[_type == "gallery"]{
           title, image
         }`);
-        setProducts(productData || []);
+        setProducts(products || []);
         setGallery(galleryData || []);
       } catch (error) {
         console.error("Sanity fetch error:", error);
@@ -46,9 +53,10 @@ export default function PrisaMakeover() {
     const message = encodeURIComponent("Hi Prisa Makeover, I would like to book an appointment for your services. Please let me know the available slots.");
     window.open(`https://wa.me/919350969961?text=${message}`, '_blank');
   };
-  {/* --- 1. Filter Logic (Isse return ke upar rakhein) --- */}
-const nailsProducts = products?.filter((p: any) => p.category === 'nails' || p.category?.value === 'nails') || [];
-const jewelleryProducts = products?.filter((p: any) => p.category === 'jewellery' || p.category?.value === 'jewellery') || [];
+  const nailsProducts = products?.filter((p: any) => p.category === 'nails') || [];
+const jewelleryProducts = products?.filter((p: any) => p.category === 'jewellery') || [];
+// Backup: Agar category select karna bhul gaye ho toh wo products yahan dikhenge
+const uncategorized = products?.filter((p: any) => !p.category) || [];
 const whatsappNumber = "919350969961"; // Apna number yahan dalo
   return (
     <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white">
@@ -131,8 +139,7 @@ const whatsappNumber = "919350969961"; // Apna number yahan dalo
           </div>
         </div>
       </section>
-{/* --- 2. Shopping Section (Return ke andar) --- */}
-<section id="shop-section" className="py-32 px-6 bg-black text-white">
+      <section id="shop-section" className="py-32 px-6 bg-black text-white">
   <div className="max-w-6xl mx-auto">
     
     <h2 className="font-serif text-5xl italic text-center mb-10">
@@ -149,7 +156,7 @@ const whatsappNumber = "919350969961"; // Apna number yahan dalo
 
     <div className="space-y-32">
       
-      {/* NAILS SECTION */}
+      {/* --- NAILS SUB-SECTION --- */}
       {nailsProducts.length > 0 && (
         <div>
           <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
@@ -157,8 +164,9 @@ const whatsappNumber = "919350969961"; // Apna number yahan dalo
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {nailsProducts.map((p: any) => (
-              <div key={p._id} className="group">
+              <div key={p._id} className={`group ${p.isSoldOut ? 'opacity-50' : ''}`}>
                 <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
+                  {p.isSoldOut && <div className="absolute top-4 left-4 z-20 bg-red-600 text-white text-[10px] font-bold px-3 py-1 uppercase italic">Sold Out</div>}
                   {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
                 </div>
                 <div className="flex justify-between items-center px-2">
@@ -166,7 +174,13 @@ const whatsappNumber = "919350969961"; // Apna number yahan dalo
                     <h4 className="font-serif text-xl italic">{p.name}</h4>
                     <p className="text-orange-400 font-sans text-sm">{p.price}</p>
                   </div>
-                  <a href={`https://wa.me/91XXXXXXXXXX?text=Hi, I want to order: ${p.name}`} target="_blank" className="bg-white text-black hover:bg-orange-400 font-bold px-8 py-4">ORDER</a>
+                  <a 
+                    href={`https://wa.me/${whatsappNumber}?text=Hi, I want to order: ${p.name}`}
+                    target="_blank"
+                    className={`bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all duration-300 ${p.isSoldOut ? 'pointer-events-none opacity-50' : ''}`}
+                  >
+                    {p.isSoldOut ? 'SOLD' : 'ORDER'}
+                  </a>
                 </div>
               </div>
             ))}
@@ -174,7 +188,7 @@ const whatsappNumber = "919350969961"; // Apna number yahan dalo
         </div>
       )}
 
-      {/* JEWELLERY SECTION */}
+      {/* --- JEWELLERY SUB-SECTION --- */}
       {jewelleryProducts.length > 0 && (
         <div>
           <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
@@ -182,8 +196,9 @@ const whatsappNumber = "919350969961"; // Apna number yahan dalo
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {jewelleryProducts.map((p: any) => (
-              <div key={p._id} className="group">
+              <div key={p._id} className={`group ${p.isSoldOut ? 'opacity-50' : ''}`}>
                 <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
+                  {p.isSoldOut && <div className="absolute top-4 left-4 z-20 bg-red-600 text-white text-[10px] font-bold px-3 py-1 uppercase italic">Sold Out</div>}
                   {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
                 </div>
                 <div className="flex justify-between items-center px-2">
@@ -191,7 +206,13 @@ const whatsappNumber = "919350969961"; // Apna number yahan dalo
                     <h4 className="font-serif text-xl italic">{p.name}</h4>
                     <p className="text-orange-400 font-sans text-sm">{p.price}</p>
                   </div>
-                  <a href={`https://wa.me/91XXXXXXXXXX?text=Hi, I want to order: ${p.name}`} target="_blank" className="bg-white text-black hover:bg-orange-400 font-bold px-8 py-4">ORDER</a>
+                  <a 
+                    href={`https://wa.me/${whatsappNumber}?text=Hi, I want to order: ${p.name}`}
+                    target="_blank"
+                    className={`bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all duration-300 ${p.isSoldOut ? 'pointer-events-none opacity-50' : ''}`}
+                  >
+                    {p.isSoldOut ? 'SOLD' : 'ORDER'}
+                  </a>
                 </div>
               </div>
             ))}
@@ -199,115 +220,20 @@ const whatsappNumber = "919350969961"; // Apna number yahan dalo
         </div>
       )}
 
-      {/* BACKUP: AGAR CATEGORY KA DATA NAHI MILA TO SAB YAHA DIKHEGA */}
-      {nailsProducts.length === 0 && jewelleryProducts.length === 0 && products?.length > 0 && (
-        <div>
-          <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
-            Our Collection
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {products.map((p: any) => (
-              <div key={p._id} className="group">
-                <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
-                  {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
-                </div>
-                <div className="flex justify-between items-center px-2">
-                  <div className="space-y-1">
-                    <h4 className="font-serif text-xl italic">{p.name}</h4>
-                    <p className="text-orange-400 font-sans text-sm">{p.price}</p>
-                  </div>
-                  <a href={`https://wa.me/91XXXXXXXXXX?text=Hi, I want to order: ${p.name}`} target="_blank" className="bg-white text-black hover:bg-orange-400 font-bold px-8 py-4">ORDER</a>
-                </div>
+      {/* --- BACKUP SECTION (For uncategorized products) --- */}
+      {uncategorized.length > 0 && (
+        <div className="pt-10 border-t border-neutral-800">
+          <p className="text-neutral-500 text-center italic mb-10">More designs from our studio...</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 opacity-80">
+            {uncategorized.map((p: any) => (
+              <div key={p._id} className="flex justify-between items-center border border-neutral-800 p-4">
+                <h4 className="font-serif text-lg italic">{p.name}</h4>
+                <a href={`https://wa.me/${whatsappNumber}?text=Hi, I want to order: ${p.name}`} target="_blank" className="text-orange-400 font-bold uppercase text-sm border-b border-orange-400">Order Now</a>
               </div>
             ))}
           </div>
         </div>
       )}
-
-    </div>
-  </div>
-</section>
-
-{/* --- MAIN SHOPPING SECTION --- */}
-<section id="shop-section" className="py-32 px-6 bg-black text-white font-sans">
-  <div className="max-w-6xl mx-auto">
-    
-    {/* 1. HEADING */}
-    <h2 className="font-serif text-5xl italic text-center mb-10">
-      The <span className="text-orange-400">Prisa</span> Collection
-    </h2>
-
-    {/* 2. SHOPPING NOTE */}
-    <div className="flex flex-col items-center space-y-6 mb-24">
-      <div className="h-[1px] w-16 bg-orange-400/30"></div>
-      <p className="font-sans text-xs md:text-sm uppercase tracking-[0.4em] text-neutral-400 font-light text-center max-w-2xl px-4 leading-relaxed">
-        " Select your favorite piece and finalize on WhatsApp Concierge "
-      </p>
-      <div className="h-[1px] w-16 bg-orange-400/30"></div>
-    </div>
-
-    {/* 3. CATEGORIES SECTION */}
-    <div className="space-y-32">
-      
-      {/* --- NAILS SUB-SECTION --- */}
-      <div>
-        <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
-          Press-On Nails
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {nailsProducts.map((p: any) => (
-            <div key={p._id} className={`group ${p.isSoldOut ? 'opacity-50' : ''}`}>
-              <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
-                {p.isSoldOut && <div className="absolute top-4 left-4 z-20 bg-red-600 text-white text-[10px] font-bold px-3 py-1 uppercase italic">Sold Out</div>}
-                {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
-              </div>
-              <div className="flex justify-between items-center px-2">
-                <div className="space-y-1">
-                  <h4 className="font-serif text-xl italic">{p.name}</h4>
-                  <p className="text-orange-400 font-sans text-sm">{p.price}</p>
-                </div>
-                <a 
-                  href={`https://wa.me/${whatsappNumber}?text=Hi, I want to order: ${p.name}`}
-                  target="_blank"
-                  className={`bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all duration-300 ${p.isSoldOut ? 'pointer-events-none opacity-50' : ''}`}
-                >
-                  {p.isSoldOut ? 'SOLD' : 'ORDER'}
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* --- JEWELLERY SUB-SECTION --- */}
-      <div>
-        <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
-          Luxury Jewellery
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {jewelleryProducts.map((p: any) => (
-            <div key={p._id} className={`group ${p.isSoldOut ? 'opacity-50' : ''}`}>
-              <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
-                {p.isSoldOut && <div className="absolute top-4 left-4 z-20 bg-red-600 text-white text-[10px] font-bold px-3 py-1 uppercase italic">Sold Out</div>}
-                {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
-              </div>
-              <div className="flex justify-between items-center px-2">
-                <div className="space-y-1">
-                  <h4 className="font-serif text-xl italic">{p.name}</h4>
-                  <p className="text-orange-400 font-sans text-sm">{p.price}</p>
-                </div>
-                <a 
-                  href={`https://wa.me/${whatsappNumber}?text=Hi, I want to order: ${p.name}`}
-                  target="_blank"
-                  className={`bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all duration-300 ${p.isSoldOut ? 'pointer-events-none opacity-50' : ''}`}
-                >
-                  {p.isSoldOut ? 'SOLD' : 'ORDER'}
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
 
     </div>
   </div>
