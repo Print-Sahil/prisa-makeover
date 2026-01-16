@@ -52,11 +52,24 @@ const products = await client.fetch(`*[_type == "product"]{
     window.open(`https://wa.me/919350969961?text=${message}`, '_blank');
   };
 // Robust Filtering: Ye har tarah ke data format ko handle karega
-const whatsappNumber = "919350969961";
-const siteUrl = "https://prisa-makeover.vercel.app"; // Apni live site ka UR
 
-const nailsProducts = products?.filter((p: any) => p.category === 'nails' || p.category?.value === 'nails') || [];
-const jewelleryProducts = products?.filter((p: any) => p.category === 'jewellery' || p.category?.value === 'jewellery') || [];
+const siteUrl = "https://prisa-makeover.vercel.app"; // Apni live site ka UR
+const nails = products?.filter((p: any) => p.category === 'nails' || p.category?.value === 'nails') || [];
+const jewellery = products?.filter((p: any) => p.category === 'jewellery' || p.category?.value === 'jewellery') || [];
+const whatsappNumber = "919350969961";
+// Is code ko apne return ke upar rakhein
+<script dangerouslySetInnerHTML={{
+  __html: `
+    window.addEventListener('load', function() {
+      if (window.location.hash) {
+        setTimeout(function() {
+          const el = document.querySelector(window.location.hash);
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }, 500); // 500ms ka wait taaki Sanity data load ho jaye
+      }
+    });
+  `
+}} />
   return (
     <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white">
       
@@ -106,7 +119,7 @@ const jewelleryProducts = products?.filter((p: any) => p.category === 'jewellery
               Book Appointment
             </Button>
             <Button variant="outline" className="border-white text-white hover:bg-white hover:text-black px-12 py-8 rounded-full text-xs font-bold uppercase backdrop-blur-sm" onClick={() => document.getElementById('shop-section')?.scrollIntoView({ behavior: 'smooth' })}>
-              Shop Press-On Nails
+              Shop Now
             </Button>
           {/* My Work Button - Size & Logic Fixed */}
   <Button 
@@ -140,75 +153,88 @@ const jewelleryProducts = products?.filter((p: any) => p.category === 'jewellery
       </section>
      
     {/* SHOPPING SECTION */}
-   <section id="shop-section" className="py-32 px-6 bg-black text-white font-sans">
+    {/* --- START OF SHOPPING SECTION --- */}
+<section id="shop-section" className="py-32 px-6 bg-black text-white font-sans">
   <div className="max-w-6xl mx-auto">
+    
+    <h2 className="font-serif text-5xl italic text-center mb-10">
+      Our Collection
+    </h2>
+
+    <div className="flex flex-col items-center space-y-6 mb-24 text-center">
+      <div className="h-[1px] w-16 bg-orange-400/30"></div>
+      <p className="font-sans text-xs md:text-sm uppercase tracking-[0.4em] text-neutral-400 font-light max-w-2xl px-4 leading-relaxed">
+        " Select your favorite piece and click on order . You will be seamlessly redirected to our WhatsApp to finalize your Product "
+      </p>
+      <div className="h-[1px] w-16 bg-orange-400/30"></div>
+    </div>
+
     <div className="space-y-32">
       
-      {/* --- NAILS SECTION --- */}
-      {nailsProducts.length > 0 && (
-        <div>
-          <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">Press-On Nails</h3>
+      {/* --- NAILS SUB-SECTION --- */}
+      {nails.length > 0 && (
+        <div id="nails">
+          <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
+            Press-On Nails
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {nailsProducts.map((p: any) => {
-              // Yahan hum particular product ka link bana rahe hain
-              const productLink = `${siteUrl}#${p._id}`;
-              const message = `Hi Prisa Makeover, I want to order:\n\n*Product:* ${p.name}\n*Price:* ${p.price}\n*View Product:* ${productLink}`;
-              
-              return (
-                <div key={p._id} id={p._id} className="group scroll-mt-20"> {/* scroll-mt-20 se image heading ke niche nahi dabegi */}
-                  <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
-                    {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
-                  </div>
-                  <div className="flex justify-between items-center px-2">
-                    <div className="space-y-1 text-left">
-                      <h4 className="font-serif text-xl italic">{p.name}</h4>
-                      <p className="text-orange-400 font-sans text-sm">{p.price}</p>
-                    </div>
-                    <a 
-                      href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`}
-                      target="_blank" 
-                      className="bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all"
-                    >
-                      ORDER
-                    </a>
-                  </div>
+            {nails.map((p: any) => (
+              <div key={p._id} id={p._id} className="group scroll-mt-32">
+                <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
+                  {p.isSoldOut && <div className="absolute top-4 left-4 z-20 bg-red-600 text-white text-[10px] font-bold px-3 py-1 uppercase italic">Sold Out</div>}
+                  {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
                 </div>
-              );
-            })}
+                <div className="flex justify-between items-center px-2">
+                  <div className="space-y-1 text-left">
+                    <h4 className="font-serif text-xl italic">{p.name}</h4>
+                    <p className="text-orange-400 font-sans text-sm">{p.price}</p>
+                  </div>
+                  <a 
+                    href={`https://wa.me/919350969961?text=${encodeURIComponent(
+                      `Hi Prisa Makeover, I want to order this:\n\n*Product:* ${p.name}\n*Price:* ${p.price}\n*Link:* https://prisa-makeover.vercel.app/#${p._id}`
+                    )}`}
+                    target="_blank" 
+                    className={`bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all duration-300 ${p.isSoldOut ? 'pointer-events-none opacity-50' : ''}`}
+                  >
+                    {p.isSoldOut ? 'SOLD' : 'ORDER'}
+                  </a>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
 
-      {/* --- JEWELLERY SECTION (Same logic as above) --- */}
-      {jewelleryProducts.length > 0 && (
-        <div>
-          <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">Luxury Jewellery</h3>
+      {/* --- JEWELLERY SUB-SECTION --- */}
+      {jewellery.length > 0 && (
+        <div id="jewellery">
+          <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
+            Luxury Jewellery
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {jewelleryProducts.map((p: any) => {
-              const productLink = `${siteUrl}#${p._id}`;
-              const message = `Hi Prisa Makeover, I want to order:\n\n*Jewellery:* ${p.name}\n*Price:* ${p.price}\n*View Product:* ${productLink}`;
-
-              return (
-                <div key={p._id} id={p._id} className="group scroll-mt-20">
-                  <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
-                    {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
-                  </div>
-                  <div className="flex justify-between items-center px-2 text-left">
-                    <div className="space-y-1">
-                      <h4 className="font-serif text-xl italic">{p.name}</h4>
-                      <p className="text-orange-400 font-sans text-sm">{p.price}</p>
-                    </div>
-                    <a 
-                      href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`}
-                      target="_blank" 
-                      className="bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all"
-                    >
-                      ORDER
-                    </a>
-                  </div>
+            {jewellery.map((p: any) => (
+              <div key={p._id} id={p._id} className="group scroll-mt-32">
+                <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
+                  {p.isSoldOut && <div className="absolute top-4 left-4 z-20 bg-red-600 text-white text-[10px] font-bold px-3 py-1 uppercase italic">Sold Out</div>}
+                  {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
                 </div>
-              );
-            })}
+                <div className="flex justify-between items-center px-2 text-left">
+                  <div className="space-y-1">
+                    <h4 className="font-serif text-xl italic">{p.name}</h4>
+                    <p className="text-orange-400 font-sans text-sm">{p.price}</p>
+                  </div>
+                  <a 
+                    href={`https://wa.me/919350969961?text=${encodeURIComponent(
+                      `Hi Prisa Makeover, I want to order this:\n\n*Jewellery:* ${p.name}\n*Price:* ${p.price}\n*Link:* https://prisa-makeover.vercel.app/#${p._id}`
+                    )}`}
+                    target="_blank" 
+                    className={`bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all duration-300 ${p.isSoldOut ? 'pointer-events-none opacity-50' : ''}`}
+                  >
+                    {p.isSoldOut ? 'SOLD' : 'ORDER'}
+                  </a>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
@@ -216,7 +242,7 @@ const jewelleryProducts = products?.filter((p: any) => p.category === 'jewellery
     </div>
   </div>
 </section>
-
+{/* --- END OF SHOPPING SECTION --- */}
       {/* MY WORK GALLERY (LIVE) */}
       <section id="gallery-section" className="py-24 px-6 bg-[#fafafa]"></section>
   
