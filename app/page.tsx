@@ -109,7 +109,7 @@ return (
           <img src="/back.jpg" alt="Hero" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/50 shadow-inner" />
         </div>
-        <div> className="relative z-10 space-y-4"</div>
+        <div className="relative z-10 space-y-4"></div>
           <h1 className="font-serif text-7xl md:text-9xl text-white tracking-tight leading-none italic">
             Prisa <span className="text-orange-300">Makeover</span>
           </h1>
