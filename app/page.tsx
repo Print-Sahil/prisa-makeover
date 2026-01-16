@@ -109,7 +109,7 @@ return (
           <img src="/back.jpg" alt="Hero" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/50 shadow-inner" />
         </div>
-        <div className="relative z-10 space-y-4">
+        <div> className="relative z-10 space-y-4"</div>
           <h1 className="font-serif text-7xl md:text-9xl text-white tracking-tight leading-none italic">
             Prisa <span className="text-orange-300">Makeover</span>
           </h1>
@@ -120,9 +120,23 @@ return (
             <Button className="bg-white text-black hover:bg-orange-300 px-12 py-8 rounded-full text-xs font-bold uppercase transition-all shadow-2xl" onClick={handleAppointment}>
               Book Appointment
             </Button>
-            <Button variant="outline" className="border-white text-white hover:bg-white hover:text-black px-12 py-8 rounded-full text-xs font-bold uppercase backdrop-blur-sm" onClick={() => document.getElementById('shop-section')?.scrollIntoView({ behavior: 'smooth' })}>
-              Shop Now
-            </Button>
+            <div className="flex flex-col md:flex-row gap-6 justify-center pt-8">
+  {/* Button 1: Nails */}
+  <Button 
+    className="bg-white text-black hover:bg-orange-300 px-12 py-8 rounded-full text-xs font-bold uppercase transition-all shadow-2xl" 
+    onClick={() => document.getElementById('nails-category')?.scrollIntoView({ behavior: 'smooth' })}
+  >
+    Shop Press-On Nails
+  </Button>
+
+  {/* Button 2: Jewellery */}
+  <Button 
+    variant="outline" 
+    className="border-white text-white hover:bg-white hover:text-black px-12 py-8 rounded-full text-xs font-bold uppercase backdrop-blur-sm" 
+    onClick={() => document.getElementById('jewellery-category')?.scrollIntoView({ behavior: 'smooth' })}
+  >
+    Shop Luxury Jewellery
+  </Button>
           {/* My Work Button - Size & Logic Fixed */}
   <Button 
     variant="outline"
