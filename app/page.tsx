@@ -93,40 +93,37 @@ export default function PrisaMakeover() {
       </nav>
 
       {/* HERO SECTION - FIXED TAGS */}
-      {/* HERO SECTION - MOBILE OPTIMIZED */}
-<section className="relative min-h-[80vh] md:h-[95vh] flex flex-col justify-center items-center text-center px-6 overflow-hidden">
-  <div className="absolute inset-0 z-0">
-    <img 
-      src="/back.jpg" 
-      alt="Hero" 
-      className="w-full h-full object-cover object-center md:object-top" 
-    />
-    <div className="absolute inset-0 bg-black/40 md:bg-black/50 shadow-inner" />
-  </div>
-  
-  <div className="relative z-10 space-y-6 max-w-4xl pt-20 md:pt-0">
-    <h1 className="font-serif text-5xl md:text-9xl text-white tracking-tight leading-tight italic">
-      Prisa <span className="text-orange-300">Makeover</span>
-    </h1>
-    <p className="font-sans text-xs md:text-base uppercase tracking-[0.3em] md:tracking-[0.5em] text-gray-200 font-light">
-      Luxury Nail Art • Makeup • Extensions
-    </p>
-    
-    <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center pt-8">
-      <Button className="bg-white text-black hover:bg-orange-300 px-8 md:px-12 py-6 md:py-8 rounded-full text-[10px] md:text-xs font-bold uppercase transition-all shadow-2xl" onClick={handleAppointment}>
-        Book Appointment
-      </Button>
-      <div className="grid grid-cols-2 md:flex md:flex-row gap-3 md:gap-6 w-full md:w-auto">
-        <Button className="bg-white/10 text-white border border-white/20 hover:bg-orange-300 hover:text-black px-4 md:px-12 py-6 md:py-8 rounded-full text-[10px] md:text-xs font-bold uppercase backdrop-blur-md transition-all" onClick={() => document.getElementById('nails-category')?.scrollIntoView({ behavior: 'smooth' })}>
-          Nails
-        </Button>
-        <Button variant="outline" className="border-white/20 text-white hover:bg-white hover:text-black px-4 md:px-12 py-6 md:py-8 rounded-full text-[10px] md:text-xs font-bold uppercase backdrop-blur-sm" onClick={() => document.getElementById('jewellery-category')?.scrollIntoView({ behavior: 'smooth' })}>
-          Jewellery
-        </Button>
-      </div>
-    </div>
-  </div>
-</section>
+      <section className="h-[95vh] relative flex flex-col justify-center items-center text-center px-6 pt-20 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img src="/back.jpg" alt="Hero" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-black/50 shadow-inner" />
+        </div>
+        
+        <div className="relative z-10 space-y-6">
+          <h1 className="font-serif text-7xl md:text-9xl text-white tracking-tight leading-none italic">
+            Prisa <span className="text-orange-300">Makeover</span>
+          </h1>
+          <p className="font-sans text-sm md:text-base uppercase tracking-[0.5em] text-gray-200 font-light">
+            Luxury Nail Art • Makeup • Extensions
+          </p>
+          
+          <div className="flex flex-col md:flex-row gap-6 justify-center pt-8">
+            <Button className="bg-white text-black hover:bg-orange-300 px-12 py-8 rounded-full text-xs font-bold uppercase transition-all shadow-2xl" onClick={handleAppointment}>
+              Book Appointment
+            </Button>
+            <Button className="bg-white text-black hover:bg-orange-300 px-12 py-8 rounded-full text-xs font-bold uppercase transition-all shadow-2xl" onClick={() => document.getElementById('nails-category')?.scrollIntoView({ behavior: 'smooth' })}>
+              Shop Press-On Nails
+            </Button>
+            <Button variant="outline" className="border-white text-white hover:bg-white hover:text-black px-12 py-8 rounded-full text-xs font-bold uppercase backdrop-blur-sm" onClick={() => document.getElementById('jewellery-category')?.scrollIntoView({ behavior: 'smooth' })}>
+              Shop Luxury Jewellery
+            </Button>
+            <Button variant="outline" className="border-orange-300 text-orange-300 hover:bg-orange-300 hover:text-black px-12 py-8 rounded-full text-xs font-bold uppercase tracking-widest transition-all backdrop-blur-sm" onClick={() => document.getElementById('gallery-section')?.scrollIntoView({ behavior: 'smooth' })}>
+              View My Work
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* SERVICES */}
       <section className="py-32 px-6 bg-white">
         <div className="max-w-6xl mx-auto text-center">
@@ -229,33 +226,30 @@ export default function PrisaMakeover() {
       </section>
 
       {/* ABOUT US */}
-      {/* ABOUT US - MOBILE RESPONSIVE */}
-<section className="py-20 md:py-32 px-6 bg-white overflow-hidden">
-  <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
-    <div className="relative group order-2 md:order-1">
-      <div className="absolute -inset-2 md:-inset-4 border border-orange-200 translate-x-4 translate-y-4 md:translate-x-8 md:translate-y-8 -z-10 group-hover:translate-x-2 md:group-hover:translate-x-4 transition-transform duration-500"></div>
-      <img 
-        src="/aboutus.jpg" 
-        alt="About" 
-        className="w-full h-[350px] md:h-[550px] object-cover shadow-2xl" 
-      />
-    </div>
-    <div className="space-y-6 md:space-y-8 order-1 md:order-2">
-      <div className="space-y-2">
-        <p className="text-orange-500 text-[10px] md:text-xs uppercase tracking-[0.4em] font-bold">The Story</p>
-        <h2 className="font-serif text-4xl md:text-5xl italic leading-tight text-neutral-800">About Prisa Makeover</h2>
-      </div>
-      <div className="space-y-4 md:space-y-6 text-neutral-600 font-light leading-relaxed text-sm md:text-base">
-        <p>Prisa Makeover is a luxury beauty studio dedicated to creating elegant transformations. We specialize in premium nail extensions, makeup artistry, and eyelash extensions.</p>
-        <p className="font-serif text-lg md:text-xl italic text-orange-400">"We don’t just create looks — we create confidence."</p>
-        <div className="pt-6 grid grid-cols-2 gap-4 md:gap-8 border-t border-neutral-100">
-          <div><h4 className="font-serif text-xl md:text-2xl italic text-neutral-800">3+</h4><p className="text-[9px] md:text-[10px] uppercase tracking-widest text-gray-400">Years Experience</p></div>
-          <div><h4 className="font-serif text-xl md:text-2xl italic text-neutral-800">250+</h4><p className="text-[9px] md:text-[10px] uppercase tracking-widest text-gray-400">Happy Clients</p></div>
+      <section className="py-32 px-6 bg-white overflow-hidden">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+          <div className="relative group">
+            <div className="absolute -inset-4 border border-orange-200 translate-x-8 translate-y-8 -z-10 group-hover:translate-x-4 group-hover:translate-y-4 transition-transform duration-500"></div>
+            <img src="/aboutus.jpg" alt="About" className="w-full h-[550px] object-cover shadow-2xl" />
+          </div>
+          <div className="space-y-8">
+            <div className="space-y-2">
+              <p className="text-orange-500 text-xs uppercase tracking-[0.4em] font-bold">The Story</p>
+              <h2 className="font-serif text-5xl italic leading-tight text-neutral-800">About Prisa Makeover</h2>
+            </div>
+            <div className="space-y-6 text-neutral-600 font-light leading-relaxed">
+              <p>Prisa Makeover is a luxury beauty studio dedicated to creating elegant, flawless, and confidence-boosting transformations.</p>
+              <p>Every detail at Prisa Makeover is crafted with precision and high-quality products.</p>
+              <p className="font-serif text-xl italic text-orange-400">"We don’t just create looks — we create confidence."</p>
+              <div className="pt-4 grid grid-cols-2 gap-8 border-t border-neutral-100">
+                <div><h4 className="font-serif text-2xl italic text-neutral-800">3+</h4><p className="text-[10px] uppercase tracking-widest text-gray-400">Years Experience</p></div>
+                <div><h4 className="font-serif text-2xl italic text-neutral-800">250+</h4><p className="text-[10px] uppercase tracking-widest text-gray-400">Happy Clients</p></div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
+
       {/* VISIT & CONTACT */}
       <section className="py-32 px-6 bg-white border-t border-neutral-100">
         <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-20">
