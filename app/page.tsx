@@ -46,8 +46,9 @@ export default function PrisaMakeover() {
     const message = encodeURIComponent("Hi Prisa Makeover, I would like to book an appointment for your services. Please let me know the available slots.");
     window.open(`https://wa.me/919350969961?text=${message}`, '_blank');
   };
-const nailsProducts = products ? products.filter((p: any) => p.category === 'nails') : [];
-const jewelleryProducts = products ? products.filter((p: any) => p.category === 'jewellery') : [];
+  {/* --- 1. Filter Logic (Isse return ke upar rakhein) --- */}
+const nailsProducts = products?.filter((p: any) => p.category === 'nails' || p.category?.value === 'nails') || [];
+const jewelleryProducts = products?.filter((p: any) => p.category === 'jewellery' || p.category?.value === 'jewellery') || [];
 const whatsappNumber = "919350969961"; // Apna number yahan dalo
   return (
     <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white">
@@ -130,6 +131,102 @@ const whatsappNumber = "919350969961"; // Apna number yahan dalo
           </div>
         </div>
       </section>
+{/* --- 2. Shopping Section (Return ke andar) --- */}
+<section id="shop-section" className="py-32 px-6 bg-black text-white">
+  <div className="max-w-6xl mx-auto">
+    
+    <h2 className="font-serif text-5xl italic text-center mb-10">
+      The <span className="text-orange-400">Prisa</span> Collection
+    </h2>
+
+    <div className="flex flex-col items-center space-y-6 mb-24">
+      <div className="h-[1px] w-16 bg-orange-400/30"></div>
+      <p className="font-sans text-xs md:text-sm uppercase tracking-[0.4em] text-neutral-400 font-light text-center">
+        " SELECT YOUR FAVORITE PIECE AND FINALIZE ON WHATSAPP CONCIERGE "
+      </p>
+      <div className="h-[1px] w-16 bg-orange-400/30"></div>
+    </div>
+
+    <div className="space-y-32">
+      
+      {/* NAILS SECTION */}
+      {nailsProducts.length > 0 && (
+        <div>
+          <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
+            Press-On Nails
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {nailsProducts.map((p: any) => (
+              <div key={p._id} className="group">
+                <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
+                  {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
+                </div>
+                <div className="flex justify-between items-center px-2">
+                  <div className="space-y-1">
+                    <h4 className="font-serif text-xl italic">{p.name}</h4>
+                    <p className="text-orange-400 font-sans text-sm">{p.price}</p>
+                  </div>
+                  <a href={`https://wa.me/91XXXXXXXXXX?text=Hi, I want to order: ${p.name}`} target="_blank" className="bg-white text-black hover:bg-orange-400 font-bold px-8 py-4">ORDER</a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* JEWELLERY SECTION */}
+      {jewelleryProducts.length > 0 && (
+        <div>
+          <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
+            Luxury Jewellery
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {jewelleryProducts.map((p: any) => (
+              <div key={p._id} className="group">
+                <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
+                  {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
+                </div>
+                <div className="flex justify-between items-center px-2">
+                  <div className="space-y-1">
+                    <h4 className="font-serif text-xl italic">{p.name}</h4>
+                    <p className="text-orange-400 font-sans text-sm">{p.price}</p>
+                  </div>
+                  <a href={`https://wa.me/91XXXXXXXXXX?text=Hi, I want to order: ${p.name}`} target="_blank" className="bg-white text-black hover:bg-orange-400 font-bold px-8 py-4">ORDER</a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* BACKUP: AGAR CATEGORY KA DATA NAHI MILA TO SAB YAHA DIKHEGA */}
+      {nailsProducts.length === 0 && jewelleryProducts.length === 0 && products?.length > 0 && (
+        <div>
+          <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
+            Our Collection
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {products.map((p: any) => (
+              <div key={p._id} className="group">
+                <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
+                  {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
+                </div>
+                <div className="flex justify-between items-center px-2">
+                  <div className="space-y-1">
+                    <h4 className="font-serif text-xl italic">{p.name}</h4>
+                    <p className="text-orange-400 font-sans text-sm">{p.price}</p>
+                  </div>
+                  <a href={`https://wa.me/91XXXXXXXXXX?text=Hi, I want to order: ${p.name}`} target="_blank" className="bg-white text-black hover:bg-orange-400 font-bold px-8 py-4">ORDER</a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+    </div>
+  </div>
+</section>
 
 {/* --- MAIN SHOPPING SECTION --- */}
 <section id="shop-section" className="py-32 px-6 bg-black text-white font-sans">
