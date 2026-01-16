@@ -46,13 +46,9 @@ export default function PrisaMakeover() {
     const message = encodeURIComponent("Hi Prisa Makeover, I would like to book an appointment for your services. Please let me know the available slots.");
     window.open(`https://wa.me/919350969961?text=${message}`, '_blank');
   };
-
-  const handleOrder = (productName: string) => {
-    const productLink = `${baseUrl}/#shop-section`;
-    const message = encodeURIComponent(`Hi, I want to order "${productName}". \n\nProduct Link: ${productLink}`);
-    window.open(`https://wa.me/919350969961?text=${message}`, '_blank');
-  };
-
+const nailsProducts = products ? products.filter((p: any) => p.category === 'nails') : [];
+const jewelleryProducts = products ? products.filter((p: any) => p.category === 'jewellery') : [];
+const whatsappNumber = "919350969961"; // Apna number yahan dalo
   return (
     <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white">
       
@@ -135,42 +131,90 @@ export default function PrisaMakeover() {
         </div>
       </section>
 
-      {/* SHOP SECTION (LIVE) */}
-      <section id="shop-section" className="py-32 px-6 bg-black text-white">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-5xl italic text-center mb-20">The <span className="text-orange-400">Press-On</span> Collection</h2>
-          {/* ELEGANT NOTE WITH INCREASED MARGIN BOTTOM */}
-      <div className="flex flex-col items-center space-y-6">
-        <div className="h-[1px] w-16 bg-orange-400/30"></div>
-        <p className="font-sans text-xs md:text-sm uppercase tracking-[0.4em] text-neutral-400 font-light leading-relaxed max-w-2xl px-4">
-          " Select your favorite set and click order. You will be seamlessly redirected to our <span className="text-white font-medium border-b border-orange-300/50 pb-1">WhatsApp Concierge</span> to finalize your purchase and custom sizing. "
-        </p>
-        <div className="h-[1px] w-16 bg-orange-400/30"></div>
-      </div>
-  
-  
-          <div className="grid md:grid-cols-3 gap-12">
-            {products.map((p, i) => (
-              <div key={i} className={`group ${p.isSoldOut ? 'opacity-50' : ''}`}>
-                <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900">
-                  {p.isSoldOut && <div className="absolute top-4 left-4 z-20 bg-red-600 text-white text-[10px] font-bold px-3 py-1 uppercase italic">Sold Out</div>}
-                  {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
-                </div>
-                <div className="flex justify-between items-center px-2">
-                  <div className="space-y-1">
-                    <h3 className="font-serif text-xl italic">{p.name}</h3>
-                    <p className="text-orange-400 font-sans text-sm">{p.price}</p>
-                  </div>
-                  <Button disabled={p.isSoldOut} className="bg-white text-black hover:bg-orange-400 font-bold px-8 py-6 rounded-none" onClick={() => !p.isSoldOut && handleOrder(p.name)}>
-                    {p.isSoldOut ? 'SOLD' : 'ORDER'}
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+{/* --- MAIN SHOPPING SECTION --- */}
+<section id="shop-section" className="py-32 px-6 bg-black text-white font-sans">
+  <div className="max-w-6xl mx-auto">
+    
+    {/* 1. HEADING */}
+    <h2 className="font-serif text-5xl italic text-center mb-10">
+      The <span className="text-orange-400">Prisa</span> Collection
+    </h2>
 
+    {/* 2. SHOPPING NOTE */}
+    <div className="flex flex-col items-center space-y-6 mb-24">
+      <div className="h-[1px] w-16 bg-orange-400/30"></div>
+      <p className="font-sans text-xs md:text-sm uppercase tracking-[0.4em] text-neutral-400 font-light text-center max-w-2xl px-4 leading-relaxed">
+        " Select your favorite piece and finalize on WhatsApp Concierge "
+      </p>
+      <div className="h-[1px] w-16 bg-orange-400/30"></div>
+    </div>
+
+    {/* 3. CATEGORIES SECTION */}
+    <div className="space-y-32">
+      
+      {/* --- NAILS SUB-SECTION --- */}
+      <div>
+        <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
+          Press-On Nails
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          {nailsProducts.map((p: any) => (
+            <div key={p._id} className={`group ${p.isSoldOut ? 'opacity-50' : ''}`}>
+              <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
+                {p.isSoldOut && <div className="absolute top-4 left-4 z-20 bg-red-600 text-white text-[10px] font-bold px-3 py-1 uppercase italic">Sold Out</div>}
+                {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
+              </div>
+              <div className="flex justify-between items-center px-2">
+                <div className="space-y-1">
+                  <h4 className="font-serif text-xl italic">{p.name}</h4>
+                  <p className="text-orange-400 font-sans text-sm">{p.price}</p>
+                </div>
+                <a 
+                  href={`https://wa.me/${whatsappNumber}?text=Hi, I want to order: ${p.name}`}
+                  target="_blank"
+                  className={`bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all duration-300 ${p.isSoldOut ? 'pointer-events-none opacity-50' : ''}`}
+                >
+                  {p.isSoldOut ? 'SOLD' : 'ORDER'}
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* --- JEWELLERY SUB-SECTION --- */}
+      <div>
+        <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
+          Luxury Jewellery
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          {jewelleryProducts.map((p: any) => (
+            <div key={p._id} className={`group ${p.isSoldOut ? 'opacity-50' : ''}`}>
+              <div className="relative aspect-square overflow-hidden mb-6 bg-neutral-900 border border-neutral-800">
+                {p.isSoldOut && <div className="absolute top-4 left-4 z-20 bg-red-600 text-white text-[10px] font-bold px-3 py-1 uppercase italic">Sold Out</div>}
+                {p.image && <img src={urlFor(p.image).url()} alt={p.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />}
+              </div>
+              <div className="flex justify-between items-center px-2">
+                <div className="space-y-1">
+                  <h4 className="font-serif text-xl italic">{p.name}</h4>
+                  <p className="text-orange-400 font-sans text-sm">{p.price}</p>
+                </div>
+                <a 
+                  href={`https://wa.me/${whatsappNumber}?text=Hi, I want to order: ${p.name}`}
+                  target="_blank"
+                  className={`bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all duration-300 ${p.isSoldOut ? 'pointer-events-none opacity-50' : ''}`}
+                >
+                  {p.isSoldOut ? 'SOLD' : 'ORDER'}
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
       {/* MY WORK GALLERY (LIVE) */}
       <section id="gallery-section" className="py-24 px-6 bg-[#fafafa]"></section>
   
