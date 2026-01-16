@@ -52,25 +52,27 @@ const products = await client.fetch(`*[_type == "product"]{
     window.open(`https://wa.me/919350969961?text=${message}`, '_blank');
   };
 // Robust Filtering: Ye har tarah ke data format ko handle karega
-
-const siteUrl = "https://prisa-makeover.vercel.app"; // Apni live site ka UR
+const siteUrl = "https://prisa-makeover.vercel.app"; 
 const nails = products?.filter((p: any) => p.category === 'nails' || p.category?.value === 'nails') || [];
 const jewellery = products?.filter((p: any) => p.category === 'jewellery' || p.category?.value === 'jewellery') || [];
 const whatsappNumber = "919350969961";
-// Is code ko apne return ke upar rakhein
-<script dangerouslySetInnerHTML={{
-  __html: `
-    window.addEventListener('load', function() {
-      if (window.location.hash) {
-        setTimeout(function() {
-          const el = document.querySelector(window.location.hash);
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }, 500); // 500ms ka wait taaki Sanity data load ho jaye
-      }
-    });
-  `
-}} />
-  return (
+
+  // FIX: Jab products load ho jayein, tabhi jump kare
+  useEffect(() => {
+    if (products.length > 0 && window.location.hash) {
+      const id = window.location.hash.substring(1);
+      const timer = setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "center" });
+          // Highlight effect
+          element.classList.add("ring-2", "ring-orange-400", "rounded-lg", "duration-1000");
+        }
+      }, 800); // 800ms ka delay taaki Sanity images render ho jayein
+      return () => clearTimeout(timer);
+    }
+  }, [products]); // <-- Products dependency is key here
+return (
     <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white">
       
       {/* NAVBAR */}
@@ -153,18 +155,18 @@ const whatsappNumber = "919350969961";
       </section>
      
     {/* SHOPPING SECTION */}
-    {/* --- START OF SHOPPING SECTION --- */}
+   {/* --- START OF SHOPPING SECTION --- */}
 <section id="shop-section" className="py-32 px-6 bg-black text-white font-sans">
   <div className="max-w-6xl mx-auto">
     
-    <h2 className="font-serif text-5xl italic text-center mb-10">
-      Our Collection
+    <h2 className="font-serif text-5xl italic text-center mb-10 text-white">
+      Our <span className="text-orange-400">Collection</span>
     </h2>
 
     <div className="flex flex-col items-center space-y-6 mb-24 text-center">
       <div className="h-[1px] w-16 bg-orange-400/30"></div>
       <p className="font-sans text-xs md:text-sm uppercase tracking-[0.4em] text-neutral-400 font-light max-w-2xl px-4 leading-relaxed">
-        " Select your favorite piece and click on order . You will be seamlessly redirected to our WhatsApp to finalize your Product "
+        " Select your favorite piece and click on order. You will be redirected to our WhatsApp to finalize your Product "
       </p>
       <div className="h-[1px] w-16 bg-orange-400/30"></div>
     </div>
@@ -173,7 +175,7 @@ const whatsappNumber = "919350969961";
       
       {/* --- NAILS SUB-SECTION --- */}
       {nails.length > 0 && (
-        <div id="nails">
+        <div id="nails-category">
           <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
             Press-On Nails
           </h3>
@@ -190,8 +192,8 @@ const whatsappNumber = "919350969961";
                     <p className="text-orange-400 font-sans text-sm">{p.price}</p>
                   </div>
                   <a 
-                    href={`https://wa.me/919350969961?text=${encodeURIComponent(
-                      `Hi Prisa Makeover, I want to order this:\n\n*Product:* ${p.name}\n*Price:* ${p.price}\n*Link:* https://prisa-makeover.vercel.app/#${p._id}`
+                    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+                      `Hi Prisa Makeover, I want to order this:\n\n*Product:* ${p.name}\n*Price:* ${p.price}\n*Link:* ${siteUrl}/#${p._id}`
                     )}`}
                     target="_blank" 
                     className={`bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all duration-300 ${p.isSoldOut ? 'pointer-events-none opacity-50' : ''}`}
@@ -207,7 +209,7 @@ const whatsappNumber = "919350969961";
 
       {/* --- JEWELLERY SUB-SECTION --- */}
       {jewellery.length > 0 && (
-        <div id="jewellery">
+        <div id="jewellery-category">
           <h3 className="font-serif text-3xl italic mb-12 text-orange-400 border-l-4 border-orange-400 pl-4 uppercase tracking-widest">
             Luxury Jewellery
           </h3>
@@ -224,8 +226,8 @@ const whatsappNumber = "919350969961";
                     <p className="text-orange-400 font-sans text-sm">{p.price}</p>
                   </div>
                   <a 
-                    href={`https://wa.me/919350969961?text=${encodeURIComponent(
-                      `Hi Prisa Makeover, I want to order this:\n\n*Jewellery:* ${p.name}\n*Price:* ${p.price}\n*Link:* https://prisa-makeover.vercel.app/#${p._id}`
+                    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+                      `Hi Prisa Makeover, I want to order this:\n\n*Jewellery:* ${p.name}\n*Price:* ${p.price}\n*Link:* ${siteUrl}/#${p._id}`
                     )}`}
                     target="_blank" 
                     className={`bg-white text-black hover:bg-orange-400 font-bold px-8 py-4 transition-all duration-300 ${p.isSoldOut ? 'pointer-events-none opacity-50' : ''}`}
